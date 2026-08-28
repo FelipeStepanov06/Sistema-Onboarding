@@ -1,0 +1,15 @@
+import sqlite3
+
+from model import dados
+
+conexao = sqlite3.connect("bd.db")
+
+cursor = conexao.cursor()
+
+cursor.execute('''CREATE TABLE tbl_candidatos (
+    cpf INT PRIMARY KEY UNIQUE NOT NULL,
+    nome TEXT NOT NULL,
+    sobrenome TEXT NOT NULL,
+    data_nasc TEXT
+    email TEXT UNIQUE
+)''')
