@@ -1,17 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="UTF-8">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onboarding Service</title>
     <link rel="stylesheet" href="main.css">
+    <script src="https://kit.fontawesome.com/5b65f0748c.js" crossorigin="anonymous"></script>
 </head>
 <body>
     
-    <div class="quadrado"></div>
+    <div class="quadrado">
 
-        <div class="quadrado_nome"></div>
+        <div class="quadrado_nome">
+            <i class="fa-solid fa-user perfil"></i>
+            <input type="text" class="nome" placeholder="Digite seu nome">
+        </div>
 
+        <div class="quadrado_sobrenome">
+            <i class="fa-solid fa-user perfil"></i>
+            <input type="text" class="sobrenome" placeholder="Digite seu sobrenome">
+        </div>
+
+        <div class="quadrado_email">
+            <i class="fa-solid fa-envelope envelope"></i>
+            <input type="email" class="email" placeholder="Digite seu E-mail!">
+        </div>
+
+        <div class="quadrado_data">
+            <i class="fa-solid fa-calendar calendario"></i>
+            <input type="data" class="data" placeholder="Data de nascimento">
+        </div>
+        <div class="quadrado_cpf">
+            <i class="fa-solid fa-id-card cpf_icon"></i>
+            <input type="text" class="cpf" placeholder="Digtite seu CPF">
+
+        </div>
+
+            <div class="quadrado_empresa">
+            <i class="fa-solid fa-building construcao"></i>
+            <input type="text" class="empresa" placeholder="Digtite sua ultima empresa">
+
+        </div>
+
+
+            <div class="quadrado_cargo">
+            <i class="fa-solid fa-user-tie ult_cargo"></i>
+            <input type="text" class="cargo" placeholder="Digtite sua ultima posição">
+
+        </div>
+
+        <button class="prosseguir">Prosseguir</button>
+    </div>
     <noscript>Ative seu javascript para o site ter uma melhor performance</noscript>
     <script src="app.js"></script>
 </body>

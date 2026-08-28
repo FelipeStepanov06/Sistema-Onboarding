@@ -1,19 +1,235 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    display: flex;
+}
+
 .quadrado{
-    margin: 0 auto;
+    padding: 250px 80px ;
+    box-sizing: border-box;
+    margin: auto;
     display: flex;
     width: 800px;
     height: 1000px;
     background-color: beige;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    justify-content: first baseline;
+    gap: 30px;
+    flex-direction:column;
+
+    
 }
 
 .quadrado_nome{
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    background-color: aqua;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+
+}
+
+.nome::placeholder{
+    color: white;
+    opacity: 0.4;
+}
+
+.nome{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    opacity: 1;
+}
+
+.perfil{
+    margin-top: 9px;
+}
+
+.quadrado_sobrenome{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.sobrenome::placeholder{
+    opacity: 0.4;
+    color:white;
+}
+
+.sobrenome{
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    opacity: 1;
+}
+
+.perfil{
+    margin-top: 9px;
+}
+
+.quadrado_email{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.email::placeholder{
+    color: white;
+    opacity: 0.4;
+}
+.email{
+    background-color: transparent;
+    color:white;
+    opacity: 1;
+    flex: 1;
+    outline: none;
+    border: none;
+}
+.envelope{
+    margin-top: 9px;
+    margin-left: 1px;
+}
+
+.quadrado_data{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+
+.data::placeholder{
+    color: white;
+    opacity: 0.4;
+}
+.data{
+    background: transparent;
+    color: white;
+    opacity: 1;
+    outline: none;
+    border: none;
+    flex: 1;
+}
+
+.calendario{
+    margin-top: 9px;
+    margin-left: 1px;
+}
+
+
+.quadrado_cpf{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px; 
+}
+
+
+.cpf::placeholder{
+    color: white;
+    opacity: 0.4;
+}
+.cpf{
+    color: white;
+    background: transparent;
+    outline: none;
+    border: none;
+}
+
+.cpf_icon{
+    margin-top: 9px;
+    margin-left: 2px;
+}
+
+
+.quadrado_empresa{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.empresa::placeholder{
+    color: white;
+    opacity: 0.4;
+}
+
+.empresa{
+    color: white;
+    background: transparent;
+    outline: none;
+    border: none;
+}
+.construcao{
+    margin-top: 9px;
+    margin-left: 2px;
+}
+
+.quadrado_cargo{
+    display: flex;
+    width: 620px;
+    height: 35px;
+    background-color: rgb(112, 112, 167);
+    gap: 10px;
+    overflow: visible;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.cargo::placeholder{
+    opacity: 0.4;
+    color: white;
+}
+
+.cargo{
+    color: white;
+    background: transparent;
+    outline: none;
+    border: none;
+}
+
+.ult_cargo{
+    margin-top: 9px;
+    margin-left: 2px;
+}
+
+.prosseguir{
+    margin-top: auto;
+    margin-right: 20px;
+    align-self:flex-end;
+    background-color: #4CAF50;
+    cursor: pointer;
+    width: 90px;
+    height: 60px;
+    border: none;
+    border-radius: 10px;
 }
