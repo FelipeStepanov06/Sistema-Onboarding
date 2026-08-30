@@ -1,11 +1,13 @@
 from pydantic import BaseModel, EmailStr
 
-def dados(BaseModel):
+
+
+class Usuario(BaseModel):
     email:EmailStr
     nome:str
     sobrenome:str
-    data_nasc:int
+    data:str
     cpf:str
-    ult_emrpesa:str
-    ult_cargo:str
+    empresa:str
+    cargo:str
 
