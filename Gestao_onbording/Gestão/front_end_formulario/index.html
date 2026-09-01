@@ -9,47 +9,66 @@
 </head>
 <body>
     
-    <div class="quadrado">
+    <div class="dados_pessoais">
 
-        <div class="quadrado_nome">
-            <i class="fa-solid fa-user perfil"></i>
-            <input type="text" class="nome" placeholder="Digite seu nome">
+
+        <!--- Primeiro titulo, contendo o icone ficha tecnica-->
+        <div class="ficha_tecnica">
+            <i class="fa-regular fa-file-lines ficha-inscricao"></i>
+            <span>Ficha de Inscrição</span>            
+        </div>
+        
+        <!-- Campos dividindo por linha -->
+        <div class="campos_formulario">
+            
+            <label>Nome</label>
+            <div class="caixa_input">
+                <i class="fa-solid fa-user perfil"></i>
+                <input type="text" class="entrada_texto" placeholder="Digite seu Nome Completo">
+            </div>
         </div>
 
-        <div class="quadrado_sobrenome">
-            <i class="fa-solid fa-user perfil"></i>
-            <input type="text" class="sobrenome" placeholder="Digite seu sobrenome">
-        </div>
-
-        <div class="quadrado_email">
+        <div class="campos_formulario">
+            <label>E-mail</label> 
+            <div class="caixa_input">
             <i class="fa-solid fa-envelope envelope"></i>
-            <input type="email" class="email" placeholder="Digite seu E-mail!">
+            <input type="email" class="entrada_texto" placeholder="Digite seu E-mail!">
+            </div>
         </div>
 
-        <div class="quadrado_data">
-            <i class="fa-solid fa-calendar calendario"></i>
-            <input type="data" class="data" placeholder="Data de nascimento">
-        </div>
-        <div class="quadrado_cpf">
+        <div class="campos_formulario">
+            <label>CPF</label>
+            <div class="caixa_input">
             <i class="fa-solid fa-id-card cpf_icon"></i>
-            <input type="text" class="cpf" placeholder="Digtite seu CPF">
-
+            <input type="text" class="entrada_texto" placeholder="Digtite seu CPF">
+            </div>
         </div>
 
-            <div class="quadrado_empresa">
+        <div class="campos_formulario">
+            <label>Data de Nascimento</label>
+            <div class="caixa_input">
+            <i class="fa-solid fa-calendar calendario"></i>
+            <input type="data" class="entrada_texto" placeholder="Data de nascimento">
+            </div>
+        </div>
+
+        <div class="campos_formulario">
+            <label>Ultima Empresa</label>
+            <div class="caixa_input">
             <i class="fa-solid fa-building construcao"></i>
-            <input type="text" class="empresa" placeholder="Digtite sua ultima empresa">
-
+            <input type="text" class="entrada_texto" placeholder="Digtite sua ultima empresa">
+            </div>
         </div>
 
-
-            <div class="quadrado_cargo">
+        <div class="campos_formulario">
+            <label>Ultimo Cargo</label>
+            <div class="caixa_input">
             <i class="fa-solid fa-user-tie ult_cargo"></i>
-            <input type="text" class="cargo" placeholder="Digtite sua ultima posição">
-
+            <input type="text" class="entrada_texto" placeholder="Digtite sua ultima posição">
+            </div>
         </div>
 
-        <button class="prosseguir">Prosseguir</button>
+        <button class="inscricao">Enviar Inscrição</button>
     </div>
     <noscript>Ative seu javascript para o site ter uma melhor performance</noscript>
     <script src="app.js"></script>
