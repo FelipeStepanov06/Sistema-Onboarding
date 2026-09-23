@@ -1,0 +1,446 @@
+<!-- 
+    =======================================================================
+    PAINEL ADMINISTRATIVO - RecrutaWeb
+    =======================================================================
+    Aplicação de página única (SPA) para gerenciamento de processos seletivos.
+    As visualizações são definidas em elementos <template> e instanciadas
+    dinamicamente via JavaScript no contêiner principal (#conteudo_principal).
+
+    Estrutura do layout:
+    ┌─────────────────────────────────────────────┐
+    │              BARRA SUPERIOR                 │
+    ├──────────┬──────────────────────────────────┤
+    │          │                                  │
+    │ SIDEBAR  │       CONTEÚDO PRINCIPAL         │
+    │ (menu)   │       (alternado via templates)  │
+    │          │                                  │
+    └──────────┴──────────────────────────────────┘
+    =======================================================================
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecrutaWeb - Painel Administrativo</title>
+
+    <!-- Folha de estilos principal -->
+    <link rel="stylesheet" href="main.css">
+
+    <!-- Biblioteca de ícones (Font Awesome) -->
+    <script src="https://kit.fontawesome.com/5b65f0748c.js" crossorigin="anonymous"></script>
+
+    <!-- Biblioteca para renderização de gráficos (Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Estrutura principal com CSS Grid (barra superior, barra lateral e área de conteúdo) -->
+<div class="layout">
+
+    <!-- Barra superior fixa com identificação do sistema e ação de logout -->
+    <header class="barra_superior">
+        <div class="logo_area">
+            <div class="logo_icone"><i class="fa-solid fa-r"></i></div>
+            <span class="logo_titulo">RecrutaWeb - Painel Administrativo</span>
+        </div>
+        <!-- Botão de logout do sistema -->
+        <button class="btn_topo_icon" title="Sair" onclick="confirmarSaida()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+    </header>
+
+    <!-- Barra lateral de navegação e exibição do perfil do usuário -->
+    <aside class="sidebar">
+        <nav class="sidebar_nav">
+            <!-- Item ativo por padrão no carregamento inicial -->
+            <a class="nav_item active" data-tela="dashboard" href="#">
+                <i class="fa-solid fa-table-columns"></i><span>Dashboard</span>
+            </a>
+            <a class="nav_item" data-tela="candidatos" href="#">
+                <i class="fa-solid fa-users"></i><span>Candidatos</span>
+            </a>
+            <a class="nav_item" data-tela="vagas" href="#">
+                <i class="fa-solid fa-briefcase"></i><span>Vagas</span>
+            </a>
+            <a class="nav_item" data-tela="relatorios" href="#">
+                <i class="fa-solid fa-chart-bar"></i><span>Relatórios</span>
+            </a>
+            <a class="nav_item" data-tela="configuracoes" href="#">
+                <i class="fa-solid fa-gear"></i><span>Configurações</span>
+            </a>
+        </nav>
+
+        <!-- Informações do perfil do usuário obtidas do armazenamento local -->
+        <div class="sidebar_rodape">
+            <div class="perfil_recrutador" id="perfil_recrutador">
+                <!-- Inicial do usuário para exibição no avatar -->
+                <div class="avatar_rec" id="avatar_rec">R</div>
+                <div class="info_rec">
+                    <!-- Identificadores atualizados dinamicamente pelo script da aplicação -->
+                    <span class="rec_nome" id="rec_nome">Recrutador(a)</span>
+                    <span class="rec_cargo" id="rec_cargo">Admin</span>
+                </div>
+                <i class="fa-solid fa-chevron-down" style="color:#aaa;font-size:12px;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contêiner principal onde o conteúdo das telas é renderizado dinamicamente -->
+    <main class="conteudo_principal" id="conteudo_principal">
+        <!-- Conteúdo injetado dinamicamente via app.js -->
+    </main>
+
+</div>
+
+<!-- Modal genérico para exibição de formulários e detalhes de registros -->
+<div class="modal_overlay oculto" id="modal_overlay" onclick="fecharModal(event)">
+    <div class="modal_box" id="modal_box">
+        <div class="modal_header">
+            <h3 id="modal_titulo">Título</h3>
+            <button class="modal_fechar" onclick="fecharModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal_body" id="modal_body">
+            <!-- Conteúdo inserido dinamicamente pelo JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Templates das telas da aplicação, instanciados dinamicamente via JavaScript -->
+
+<!-- Template: Dashboard (indicadores principais, gráfico de evolução e atividade recente) -->
+<template id="tela_dashboard">
+    <div class="tela_header">
+        <div>
+            <h1>Dashboard</h1>
+            <p class="subtitulo">Visão geral do sistema</p>
+        </div>
+    </div>
+
+    <!-- Indicadores-chave de desempenho (KPIs) com valores preenchidos via API -->
+    <div class="cards_kpi">
+        <div class="card_kpi">
+            <div class="card_kpi_top">
+                <span class="kpi_label">Vagas Abertas</span>
+                <button class="btn_opcoes"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            <div class="kpi_valor" id="kpi_vagas">—</div>
+            <p class="kpi_desc" id="kpi_vagas_desc">Carregando...</p>
+        </div>
+        <div class="card_kpi">
+            <div class="card_kpi_top">
+                <span class="kpi_label">Novos Candidatos</span>
+                <button class="btn_opcoes"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            <div class="kpi_valor" id="kpi_novos">—</div>
+            <p class="kpi_desc" id="kpi_novos_desc">Carregando...</p>
+        </div>
+        <div class="card_kpi">
+            <div class="card_kpi_top">
+                <span class="kpi_label">Entrevistas Agendadas</span>
+                <button class="btn_opcoes"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            <div class="kpi_valor" id="kpi_entrevistas">—</div>
+            <p class="kpi_desc">Aguardando</p>
+        </div>
+        <div class="card_kpi">
+            <div class="card_kpi_top">
+                <span class="kpi_label">Contratações</span>
+                <button class="btn_opcoes"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            <div class="kpi_valor" id="kpi_contratados">—</div>
+            <p class="kpi_desc">Total acumulado</p>
+        </div>
+    </div>
+
+    <!-- Seção inferior do dashboard: gráfico cronológico e feed de atividade recente -->
+    <div class="dashboard_bottom">
+        <div class="card_branco card_grafico">
+            <div class="grafico_cabecalho">
+                <div>
+                    <h3>Evolução de Inscrições</h3>
+                    <p class="subtitulo">Candidatos por dia (últimos 30 dias)</p>
+                </div>
+                <select class="select_sm" id="periodo_grafico">
+                    <option value="30">Últimos 30 dias</option>
+                    <option value="7">Últimos 7 dias</option>
+                </select>
+            </div>
+            <div id="grafico_container">
+                <!-- Canvas para renderização do gráfico pelo Chart.js -->
+                <canvas id="grafico_evolucao"></canvas>
+                <!-- Mensagem de estado vazio quando não há registros cadastrados -->
+                <div class="empty_state_chart oculto" id="grafico_empty">
+                    <i class="fa-solid fa-chart-line" style="font-size:40px;color:#d1d5db;margin-bottom:12px;"></i>
+                    <p style="color:#9ca3af;font-size:14px;">Nenhum candidato cadastrado ainda.</p>
+                    <p style="color:#d1d5db;font-size:13px;">As inscrições aparecerão aqui conforme chegarem.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feed de atividade recente das últimas inscrições -->
+        <div class="card_branco card_feed">
+            <h3>Atividade Recente</h3>
+            <div class="feed_lista" id="feed_lista">
+                <!-- Itens populados dinamicamente pelo JavaScript -->
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Template: Gestão de Candidatos (tabela, busca textual, filtros e ações por registro) -->
+<template id="tela_candidatos">
+    <div class="tela_header">
+        <div>
+            <h1>Candidatos Inscritos</h1>
+            <p class="subtitulo" id="subtitulo_candidatos">Carregando...</p>
+        </div>
+        <div class="header_acoes">
+            <!-- Campo de busca textual por dados do candidato -->
+            <div class="campo_busca">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="busca_candidato" placeholder="Pesquisar candidatos...">
+            </div>
+            <!-- Filtro por status do processo seletivo -->
+            <select class="select_sm" id="filtro_status">
+                <option value="">Todos os status</option>
+                <option value="Novo">Novo</option>
+                <option value="Em Análise">Em Análise</option>
+                <option value="Entrevista">Entrevista</option>
+                <option value="Contratado">Contratado</option>
+                <option value="Reprovado">Reprovado</option>
+            </select>
+            <!-- Filtro por vaga vinculada, populado dinamicamente via API -->
+            <select class="select_sm" id="filtro_vaga">
+                <option value="">Todas as vagas</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Tabela de listagem dos candidatos -->
+    <div class="card_branco tabela_card">
+        <div class="tabela_container">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="check_todos"></th>
+                        <th>Nome Completo</th>
+                        <th>E-mail</th>
+                        <th>CPF</th>
+                        <th>Data Nasc.</th>
+                        <th>Última Empresa</th>
+                        <th>Cargo</th>
+                        <th>Vaga de Interesse</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_candidatos">
+                    <tr><td colspan="10" class="td_empty">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Carregando...
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- Template: Gestão de Vagas (listagem, filtros, criação e controle de status) -->
+<template id="tela_vagas">
+    <div class="tela_header">
+        <div>
+            <h1>Vagas</h1>
+            <p class="subtitulo" id="subtitulo_vagas">Carregando...</p>
+        </div>
+        <div class="header_acoes">
+            <div class="campo_busca">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="busca_vaga" placeholder="Pesquisar vagas...">
+            </div>
+            <select class="select_sm" id="filtro_status_vaga">
+                <option value="">Todos os status</option>
+                <option value="Aberta">Aberta</option>
+                <option value="Pausada">Pausada</option>
+                <option value="Fechada">Fechada</option>
+            </select>
+            <!-- Abertura do modal de criação de nova vaga -->
+            <button class="btn_primario" id="btn_nova_vaga">
+                <i class="fa-solid fa-plus"></i> Nova Vaga
+            </button>
+        </div>
+    </div>
+
+    <div class="card_branco tabela_card">
+        <div class="tabela_container">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Área</th>
+                        <th>Local</th>
+                        <th>Tipo</th>
+                        <th>Candidatos</th>
+                        <th>Status</th>
+                        <th>Criada em</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_vagas">
+                    <tr><td colspan="8" class="td_empty">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Carregando...
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<!-- Template: Relatórios (seleção de parâmetros, gráfico de distribuição e tabela consolidada) -->
+<template id="tela_relatorios">
+    <div class="tela_header">
+        <h1>Relatórios do Sistema</h1>
+    </div>
+
+    <!-- Filtros e parâmetros para emissão de relatórios -->
+    <div class="card_branco" style="margin-bottom:24px;">
+        <h3 style="margin-bottom:18px;font-size:16px;">Gerar Novo Relatório</h3>
+        <div class="rel_form_linha">
+            <div class="select_wrapper">
+                <select id="tipo_relatorio" class="select_rel">
+                    <option>Relatório de Candidatos por Vaga</option>
+                    <option>Relatório de Diversidade</option>
+                    <option>Relatório de Tempo de Contratação</option>
+                    <option>Relatório de Origem de Candidatos</option>
+                </select>
+                <i class="fa-solid fa-chevron-down icone_select"></i>
+            </div>
+            <label class="check_periodo">
+                <i class="fa-regular fa-calendar"></i> Este Mês
+            </label>
+            <label class="check_periodo">
+                <input type="checkbox" id="chk_90dias"> Últimos 90 dias
+            </label>
+            <button class="btn_primario" id="btn_gerar_rel" style="margin-left:auto;">Gerar Report</button>
+        </div>
+    </div>
+
+    <h3 style="margin:0 0 16px;font-size:16px;font-weight:700;">Exportar Relatório</h3>
+
+    <!-- Visualização gráfica e tabular consolidada por status -->
+    <div class="rel_grid">
+        <div class="card_branco">
+            <h4 style="margin-bottom:14px;font-size:15px;">Diversidade de Candidatos</h4>
+            <div id="rel_grafico_container">
+                <canvas id="grafico_diversidade"></canvas>
+                <div class="empty_state_chart oculto" id="rel_empty">
+                    <i class="fa-solid fa-chart-bar" style="font-size:36px;color:#d1d5db;margin-bottom:10px;"></i>
+                    <p style="color:#9ca3af;font-size:14px;">Sem dados para exibir.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card_branco">
+            <h4 style="margin-bottom:14px;font-size:15px;">Candidatos por Status</h4>
+            <table class="tabela_sim" id="tabela_status_rel">
+                <thead><tr><th>Status</th><th>Quantidade</th></tr></thead>
+                <tbody id="tbody_status_rel">
+                    <tr><td colspan="2" class="td_empty">Sem dados</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card_branco" style="margin-top:20px;">
+        <h4 style="margin-bottom:12px;font-size:15px;">Downloads Recentes</h4>
+        <p style="color:#9ca3af;font-size:14px;font-style:italic;">Nenhum relatório gerado ainda. Clique em "Gerar Report" para criar um.</p>
+    </div>
+</template>
+
+<!-- Template: Configurações (dados do usuário, gestão de equipe e status de integrações) -->
+<template id="tela_configuracoes">
+    <div class="tela_header">
+        <h1>Configurações do Sistema</h1>
+    </div>
+
+    <div class="config_grid">
+        <!-- Configurações da conta do usuário -->
+        <div class="card_branco">
+            <h3 style="margin-bottom:20px;font-size:16px;">Minha Conta</h3>
+            <div class="form_grp">
+                <label>Nome</label>
+                <input type="text" class="input_cfg" id="cfg_nome" placeholder="Seu nome">
+            </div>
+            <div class="form_grp">
+                <label>Cargo / Função</label>
+                <input type="text" class="input_cfg" id="cfg_cargo" placeholder="Ex: Recrutadora">
+            </div>
+            <div class="form_grp">
+                <label>
+                    E-mail
+                    <a href="#" class="link_cfg">Alterar</a>
+                </label>
+                <input type="email" class="input_cfg" id="cfg_email" placeholder="seu@email.com">
+            </div>
+            <div class="form_grp">
+                <label>
+                    Senha
+                    <a href="#" class="link_cfg">Alterar</a>
+                </label>
+                <input type="password" class="input_cfg" id="cfg_senha" placeholder="••••••••">
+            </div>
+            <!-- Ação para persistir os dados no localStorage e atualizar a interface -->
+            <button class="btn_primario" id="btn_salvar_cfg" style="margin-top:8px;width:100%;justify-content:center;">
+                <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+            </button>
+        </div>
+
+        <!-- Gerenciamento de equipe e permissões -->
+        <div class="card_branco">
+            <h3 style="margin-bottom:20px;font-size:16px;">Gerenciamento de Equipe</h3>
+            <div class="equipe_empty">
+                <i class="fa-solid fa-users" style="font-size:36px;color:#d1d5db;margin-bottom:10px;"></i>
+                <p style="color:#9ca3af;font-size:14px;">Nenhum membro adicionado.</p>
+                <button class="btn_secundario" style="margin-top:14px;" onclick="alert('Funcionalidade em desenvolvimento.')">
+                    <i class="fa-solid fa-plus"></i> Adicionar Membro
+                </button>
+            </div>
+        </div>
+
+        <!-- Configuração de integrações externas -->
+        <div class="card_branco">
+            <h3 style="margin-bottom:20px;font-size:16px;">Integrações</h3>
+            <div class="intg_item">
+                <div class="intg_info">
+                    <span class="intg_icon slack"><i class="fa-brands fa-slack"></i></span>
+                    <span>Slack</span>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="intg_item">
+                <div class="intg_info">
+                    <span class="intg_icon linkedin"><i class="fa-brands fa-linkedin"></i></span>
+                    <span>LinkedIn</span>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="intg_item">
+                <div class="intg_info">
+                    <span class="intg_icon google"><i class="fa-brands fa-google"></i></span>
+                    <span>Google Calendar</span>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="intg_item">
+                <div class="intg_info">
+                    <span class="intg_icon zoom"><i class="fa-brands fa-zoom"></i></span>
+                    <span>Zoom</span>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Script principal da aplicação carregado ao final do DOM -->
+<script src="app.js"></script>
+</body>
+</html>
